@@ -36,3 +36,9 @@ Please come talk to us if there is a particular library you would like to try ou
 ## Dataset
 
 Dataset is downloaded and split into train and validation for you check the `data` folder.
+
+## Pretrained Models
+
+Download all pretrained models from [this link](https://drive.google.com/file/d/1g09qUM9WibdfQVgkj6IAj8K2S3SGwc91/view?usp=sharing)
+
+And add the folder to the root directory. That is all the pretrained models should be in the `pretrained_models` folder in th e MiniGPT folder.
