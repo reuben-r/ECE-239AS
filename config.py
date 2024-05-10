@@ -5,7 +5,7 @@ from typing import Optional
 
 @dataclass
 class BigramConfig:
-    context_length: int = 2
+    context_length: int = 1
     path_to_data: Path = Path("data")
     to_log: bool = True
     log_interval: int = 100

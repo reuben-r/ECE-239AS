@@ -10,7 +10,6 @@ from einops import einsum, reduce, rearrange
 class BigramLanguageModel(nn.Module):
     """
     Class definition for a simple bigram language model.
-
     """
 
     def __init__(self, config):
@@ -42,7 +41,7 @@ class BigramLanguageModel(nn.Module):
 
         Args:
         x : torch.Tensor
-            A tensor of shape (batch_size, 2) containing the input tokens.
+            A tensor of shape (batch_size, 1) containing the input tokens.
 
         Output:
         torch.Tensor
@@ -119,6 +118,7 @@ class SingleHeadAttention(nn.Module):
         3. A linear layer for value. (self.value) # **set bias to False**
         4. A dropout layer. (self.dropout)
         5. A causal mask. (self.causal_mask) This should be registered as a buffer.
+        NOTE : Please make sure that the causal mask is upper triangular and not lower triangular (this helps in setting up the test cases, )
 
          NOTE : PLEASE KEEP OF EACH LAYER AS PROVIDED BELOW TO FACILITATE TESTING.
         """
