@@ -170,11 +170,12 @@ def train_minigpt(num_iter):
     running_loss = 0.0
 
     for i, (inputs, targets) in enumerate(train_dataloader):
-        inputs, targets = inputs.to(device), targets.squeeze(1).view(-1).to(device)
+        inputs, targets = inputs.to(device), targets.to(device)
+        targets = torch.flatten(targets, 0, 1).to(device)
         #print(targets.shape)
         optimizer.zero_grad()
-        outputs = model(inputs).squeeze(1)
-        outputs = torch.nn.Flatten(0, 1)(outputs).to(device)
+        outputs = model(inputs)
+        outputs = torch.flatten(outputs, 0, 1).to(device)
         #print(outputs.shape)
         loss = lossfunc(outputs, targets)
         loss.backward()
@@ -196,9 +197,10 @@ def train_minigpt(num_iter):
             val_loss = 0.0
             with torch.no_grad():
                 for j, (vinputs, vtargets) in enumerate(eval_dataloader):
-                    vinputs, vtargets = vinputs.to(device), vtargets.squeeze(1).view(-1).to(device)
-                    voutputs = model(inputs).squeeze(1)
-                    voutputs = torch.nn.Flatten(0, 1)(voutputs).to(device)
+                    vinputs, vtargets = vinputs.to(device), vtargets.to(device)
+                    vtargets = torch.flatten(vtargets, 0, 1).to(device)
+                    voutputs = model(vinputs)
+                    voutputs = torch.flatten(voutputs, 0, 1).to(device)
                     vloss = lossfunc(voutputs, vtargets)
                     val_loss += vloss.item()
                     if j > validation_size:
