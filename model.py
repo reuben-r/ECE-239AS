@@ -361,7 +361,8 @@ class LayerNorm(nn.Module):
         # ========= TODO : START ========= #
 
         mean = input.mean(dim=-1, keepdim=True)
-        std = input.std(dim=-1, keepdim=True, unbiased=False)
+        input_clone = input.clone()
+        std = input_clone.std(dim=-1, keepdim=True)
         normalized = (input - mean) / ((std ** 2 + self.eps) ** .5)
         if self.elementwise_affine:
             normalized = normalized * self.gamma + self.beta
