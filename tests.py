@@ -28,7 +28,7 @@ def check_singleheadattention(model, checkpoint_file, device="cpu"):
                 "transformer_layers.0.attention.head_0.value.weight"
             ]
         )
-        model.causal_mask.copy_(
+        model.causal_mask_uniquename.copy_(
             ckpt["model_state_dict"][
                 "transformer_layers.0.attention.head_0.causal_mask"
             ]
@@ -68,7 +68,7 @@ def check_multiheadattention(model, checkpoint_file, device="cpu"):
                 "transformer_layers.0.attention.head_0.value.weight"
             ]
         )
-        model.head_0.causal_mask.copy_(
+        model.head_0.causal_mask_uniquename.copy_(
             ckpt["model_state_dict"][
                 "transformer_layers.0.attention.head_0.causal_mask"
             ]
@@ -87,7 +87,7 @@ def check_multiheadattention(model, checkpoint_file, device="cpu"):
                 "transformer_layers.0.attention.head_1.value.weight"
             ]
         )
-        model.head_1.causal_mask.copy_(
+        model.head_1.causal_mask_uniquename.copy_(
             ckpt["model_state_dict"][
                 "transformer_layers.0.attention.head_1.causal_mask"
             ]
@@ -106,7 +106,7 @@ def check_multiheadattention(model, checkpoint_file, device="cpu"):
                 "transformer_layers.0.attention.head_2.value.weight"
             ]
         )
-        model.head_2.causal_mask.copy_(
+        model.head_2.causal_mask_uniquename.copy_(
             ckpt["model_state_dict"][
                 "transformer_layers.0.attention.head_2.causal_mask"
             ]
@@ -125,7 +125,7 @@ def check_multiheadattention(model, checkpoint_file, device="cpu"):
                 "transformer_layers.0.attention.head_3.value.weight"
             ]
         )
-        model.head_3.causal_mask.copy_(
+        model.head_3.causal_mask_uniquename.copy_(
             ckpt["model_state_dict"][
                 "transformer_layers.0.attention.head_3.causal_mask"
             ]
@@ -282,7 +282,7 @@ def check_transformer(model, checkpoint_file, device="cpu"):
                 "transformer_layers.0.attention.head_0.value.weight"
             ]
         )
-        model.attention.head_0.causal_mask.copy_(
+        model.attention.head_0.causal_mask_uniquename.copy_(
             ckpt["model_state_dict"][
                 "transformer_layers.0.attention.head_0.causal_mask"
             ]
@@ -301,7 +301,7 @@ def check_transformer(model, checkpoint_file, device="cpu"):
                 "transformer_layers.0.attention.head_1.value.weight"
             ]
         )
-        model.attention.head_1.causal_mask.copy_(
+        model.attention.head_1.causal_mask_uniquename.copy_(
             ckpt["model_state_dict"][
                 "transformer_layers.0.attention.head_1.causal_mask"
             ]
@@ -320,7 +320,7 @@ def check_transformer(model, checkpoint_file, device="cpu"):
                 "transformer_layers.0.attention.head_2.value.weight"
             ]
         )
-        model.attention.head_2.causal_mask.copy_(
+        model.attention.head_2.causal_mask_uniquename.copy_(
             ckpt["model_state_dict"][
                 "transformer_layers.0.attention.head_2.causal_mask"
             ]
@@ -339,7 +339,7 @@ def check_transformer(model, checkpoint_file, device="cpu"):
                 "transformer_layers.0.attention.head_3.value.weight"
             ]
         )
-        model.attention.head_3.causal_mask.copy_(
+        model.attention.head_3.causal_mask_uniquename.copy_(
             ckpt["model_state_dict"][
                 "transformer_layers.0.attention.head_3.causal_mask"
             ]
