@@ -361,8 +361,7 @@ class LayerNorm(nn.Module):
         # ========= TODO : START ========= #
 
         mean = input.mean(dim=-1, keepdim=True)
-        input_clone = input.clone()
-        std = input_clone.std(dim=-1, keepdim=True)
+        std = input.std(dim=-1, keepdim=True, unbiased=False)
         normalized = (input - mean) / ((std ** 2 + self.eps) ** .5)
         if self.elementwise_affine:
             normalized = normalized * self.gamma + self.beta
@@ -538,23 +537,20 @@ class MiniGPT(nn.Module):
         elif isinstance(module, nn.Embedding):
             torch.nn.init.normal_(module.weight, mean=0.0, std=0.02)
 
-    def generate(self, context, max_new_tokens=100):
-        """
-        Use the model to generate new tokens given a context.
-
-        Please copy the generate function from the BigramLanguageModel class you had implemented earlier.
-        """
-
-        ### ========= TODO : START ========= ###
-        context_len = self.pos.shape[0]
-        running_context = context[-context_len:]
-        output = []
-        for i in range(max_new_tokens):
-            out = self.forward(running_context)
-            next_word = torch.multinomial(torch.nn.Softmax()(out), 1)[0]
-            output.append(next_word)
-            running_context = running_context[1:]
-            running_context.append(next_word)
-        return torch.tensor(output)
-
-        ### ========= TODO : END ========= ###
+    def generate(self, context, max_new_tokens):
+      output = context.tolist()[0]  # Convert tensor to list
+      running_context = context
+      for i in range(max_new_tokens):
+          out = self.forward(running_context)
+          # Select the last token's probabilities
+          probs = out[0, -1]
+          # Add a small constant to prevent probabilities from becoming 0
+          probs = probs + 1e-9
+          next_word = torch.multinomial(torch.nn.Softmax(dim=-1)(probs), 1)
+          # Check if next_word is empty
+          if next_word.nelement() == 0:
+              break
+          output.append(next_word.item())  # Append the new word to the output list
+          # Update the running_context by removing the first token and appending the new one
+          running_context = torch.cat([running_context[:, 1:], next_word.unsqueeze(0)], dim=1)
+      return torch.tensor(output)
