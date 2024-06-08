@@ -282,7 +282,6 @@ class HardUpdateDQN(DQN):
         batch = self.replay_buffer.sample(self.batch_size)
         states, actions, rewards, next_states, dones = batch
 
-        # Create tensors directly on GPU to fix RAM (doesnt work)
         states = torch.tensor(states, device=self.device).float()
         actions = torch.tensor(actions, device=self.device).long()
         rewards = torch.tensor(rewards, device=self.device).float()
@@ -292,8 +291,11 @@ class HardUpdateDQN(DQN):
         q_values = self.model(states)
         q_values = q_values.gather(1, actions.unsqueeze(1)).squeeze(1)
 
-        next_q_values = self.target_model(next_states)
-        next_q_values = next_q_values.max(1)[0]
+        # Use DQN network to select the best action from next states
+        next_actions = self.model(next_states).max(1)[1]
+
+        # Use target network to calculate Q-value of the actions
+        next_q_values = self.target_model(next_states).gather(1, next_actions.unsqueeze(1)).squeeze(1)
 
         target_q_values = rewards + self.gamma * next_q_values * (1 - dones)
 
