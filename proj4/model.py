@@ -53,10 +53,34 @@ class Nature_Paper_Conv(nn.Module):
         #     
         # ])
         # self.MLP =
+        super(Nature_Paper_Conv, self).__init__()
+
+        self.CNN = nn.Sequential(
+            nn.Conv2d(input_size[0], 32, kernel_size=8, stride=4),
+            nn.ReLU(),
+            nn.Conv2d(32, 64, kernel_size=4, stride=2),
+            nn.ReLU(),
+            nn.Conv2d(64, 64, kernel_size=3, stride=1),
+            nn.ReLU()
+        )
+
+        # Calculate the size of the feature map after the convolutional layers
+        conv_out_size = self._get_conv_out(input_size)
+
+        self.MLP = nn.Sequential(
+            nn.Linear(conv_out_size, 512),
+            nn.ReLU(),
+            nn.Linear(512, action_size)
+        )
+
+    def _get_conv_out(self, shape):
+        o = self.CNN(torch.zeros(1, *shape))
+        return int(np.prod(o.size()))
 
     def forward(self, x:torch.Tensor)->torch.Tensor:
         #==== TODO: ====
-        raise NotImplementedError
+        conv_out = self.CNN(x).view(x.size()[0], -1)
+        return self.MLP(conv_out)
 
         
         

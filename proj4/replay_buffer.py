@@ -21,11 +21,14 @@ class ReplayBufferDQN:
             done (bool): whether the episode is done
         """
         #TODO: Implement the add method
-        raise NotImplementedError
+        experience = (state, action, reward, next_state, done)
+        if len(self.buffer) >= self.buffer_size:
+            self.buffer.pop(0)
+        self.buffer.append(experience)
         
         
     
-    def sample(self,batch_size:int,device = 'cpu'):
+    def sample(self,batch_size:int, device = 'cuda'):
         """Sample a batch of experiences from the buffer
 
         Args:
@@ -40,7 +43,20 @@ class ReplayBufferDQN:
         """
         samples = random.sample(self.buffer, batch_size)
         #TODO: Implement the sample method
-        raise NotImplementedError
+        states = np.array([sample[0] for sample in samples])
+        actions = np.array([sample[1] for sample in samples])
+        rewards = np.array([sample[2] for sample in samples])
+        next_states = np.array([sample[3] for sample in samples])
+        dones = np.array([sample[4] for sample in samples])
+
+        states = torch.tensor(states, dtype=torch.float32).to(device)
+        actions = torch.tensor(actions, dtype=torch.int64).to(device)
+        rewards = torch.tensor(rewards, dtype=torch.float32).to(device)
+        next_states = torch.tensor(next_states, dtype=torch.float32).to(device)
+        dones = torch.tensor(dones, dtype=torch.bool).to(device)
+
+        return states, actions, rewards, next_states, dones
+
 
 
     def __len__(self):

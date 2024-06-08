@@ -74,6 +74,8 @@ def check_same_torch(a,b):
     if a.shape != b.shape:
         return False
     #then check values
+    a = a.to('cuda')
+    b = b.to('cuda')
     return torch.allclose(a,b)
 
     
